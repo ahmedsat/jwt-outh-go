@@ -30,7 +30,7 @@ func Login(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
-	if user.Username != user.Username || user.Password != user.Password {
+	if u.Username != user.Username || u.Password != user.Password {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  http.StatusOK,
 			"message": "Invalid Credentials",
@@ -74,7 +74,7 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, "Invalid json provided")
 		return
 	}
-	if user.Username == user.Username {
+	if u.Username == user.Username {
 		c.JSON(http.StatusOK, gin.H{
 			"status":  http.StatusOK,
 			"message": "User already exists",
@@ -87,27 +87,9 @@ func Register(c *gin.Context) {
 	})
 }
 
-type Product struct {
-	Id          int    `json:"id"`
-	Name        string `json:"name"`
-	Price       int    `json:"price"`
-	Description string `json:"description"`
-}
-
-func productsHandler(c *gin.Context) {
-	products := []Product{
-		Product{100, "BassTune Headset 2.0", 200, "A headphone with a inbuilt high-quality microphone"},
-		Product{101, "Fastlane Toy Car", 100, "A toy car that comes with a free HD camera"},
-		Product{101, "ATV Gear Mouse", 75, "A high-quality mouse for office work and gaming"},
-	}
-	c.JSON(200, gin.H{
-		"products": products,
-	})
-}
 func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
-	r.GET("/products", productsHandler)
 	r.POST("/login", Login)
 	r.POST("/register", Register)
 	r.Run(":5000")
